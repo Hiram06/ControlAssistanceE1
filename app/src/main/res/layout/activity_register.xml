@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E6E6E6">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- HEADER -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:background="#4F6BED"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CONTROL-ASSISTENCE"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CA"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:textSize="26sp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"/>
+        </RelativeLayout>
+
+        <!-- TÍTULO -->
+        <TextView
+            android:layout_width="180dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="25dp"
+            android:background="#4F6BED"
+            android:gravity="center"
+            android:text="Registro"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp">
+
+            <EditText
+                android:id="@+id/etNombre"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:hint="Nombre completo"
+                android:background="#DADADA"
+                android:padding="15dp"
+                android:textColor="#000000"
+                android:textColorHint="#555555"
+                android:layout_marginBottom="20dp"/>
+
+            <EditText
+                android:id="@+id/etMatriculaRegister"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:hint="Matrícula"
+                android:background="#DADADA"
+                android:padding="15dp"
+                android:textColor="#000000"
+                android:textColorHint="#555555"
+                android:layout_marginBottom="20dp"/>
+
+            <EditText
+                android:id="@+id/etPasswordRegister"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:hint="Contraseña"
+                android:inputType="textPassword"
+                android:background="#DADADA"
+                android:padding="15dp"
+                android:textColor="#000000"
+                android:textColorHint="#555555"
+                android:layout_marginBottom="20dp"/>
+
+            <Spinner
+                android:id="@+id/spinnerTipoRegister"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="#DADADA"
+                android:layout_marginBottom="30dp"/>
+
+            <Button
+                android:id="@+id/btnRegistrar"
+                android:layout_width="220dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center"
+                android:backgroundTint="#4F6BED"
+                android:text="Registrarse"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

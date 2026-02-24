@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "684730347208",
+    "project_id": "controlassistance-81796",
+    "storage_bucket": "controlassistance-81796.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:684730347208:android:59c34e7d34398bbe39fffd",
+        "android_client_info": {
+          "package_name": "com.example.controlassistance"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDI8qm-i9-VLyB5DLnhgzx_BiLX9d0gRrA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
