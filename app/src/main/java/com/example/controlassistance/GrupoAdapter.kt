@@ -1,5 +1,5 @@
 package com.example.controlassistance
-import android.content.Intent
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,38 +8,36 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class GrupoAdapter(
-    private val listaGrupos: List<Grupo>
-) : RecyclerView.Adapter<GrupoAdapter.GrupoViewHolder>() {
+    private val lista: List<Grupo>,
+    private val onReporteClick: (Grupo) -> Unit,
+    private val onAsistenciaClick: (Grupo) -> Unit
+) : RecyclerView.Adapter<GrupoAdapter.ViewHolder>() {
 
-    class GrupoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvNombreGrupo: TextView = itemView.findViewById(R.id.tvNombreGrupo)
-        val btnAsistencia: Button = itemView.findViewById(R.id.btnAsistencia)
-        val btnReporte: Button = itemView.findViewById(R.id.btnReporte)
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val tvNombre: TextView = view.findViewById(R.id.tvNombreGrupo)
+        val btnReporte: Button = view.findViewById(R.id.btnReporte)
+        val btnAsistencia: Button = view.findViewById(R.id.btnAsistencia)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GrupoViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_grupo, parent, false)
-        return GrupoViewHolder(view)
+        return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: GrupoViewHolder, position: Int) {
-        val grupo = listaGrupos[position]
+    override fun getItemCount(): Int = lista.size
 
-        holder.tvNombreGrupo.text = "${grupo.materia} - ${grupo.nombre}"
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val grupo = lista[position]
 
-        holder.btnAsistencia.setOnClickListener {
-            val intent = Intent(holder.itemView.context, TomarAsistenciaActivity::class.java)
-            holder.itemView.context.startActivity(intent)
-        }
+        holder.tvNombre.text = grupo.nombre
 
         holder.btnReporte.setOnClickListener {
-            val intent = Intent(holder.itemView.context, ReporteGrupoActivity::class.java)
-            holder.itemView.context.startActivity(intent)
+            onReporteClick(grupo)
         }
-    }
 
-    override fun getItemCount(): Int {
-        return listaGrupos.size
+        holder.btnAsistencia.setOnClickListener {
+            onAsistenciaClick(grupo)
+        }
     }
 }

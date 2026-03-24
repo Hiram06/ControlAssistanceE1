@@ -17,35 +17,31 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // 🔹 Inicializar Firebase
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
-        // 🔹 Referencias UI
         val spinnerTipo = findViewById<Spinner>(R.id.spinnerTipo)
         val etMatricula = findViewById<EditText>(R.id.etMatricula)
         val etPassword = findViewById<EditText>(R.id.etPassword)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
         val tvRegister = findViewById<TextView>(R.id.tvRegister)
 
-        // 🔹 Configurar Spinner
         val opciones = arrayOf("Alumno", "Maestro")
 
         val adapter = object : ArrayAdapter<String>(this, R.layout.spinner_item, opciones) {
             override fun getDropDownView(position: Int, convertView: android.view.View?, parent: android.view.ViewGroup): android.view.View {
                 val view = super.getDropDownView(position, convertView, parent) as TextView
-                // Forzar color gris sólido usando el recurso
-                view.setTextColor(androidx.core.content.ContextCompat.getColor(context, R.color.gris_spinner))
-                view.alpha = 1.0f // Fuerza opacidad completa
+                view.setTextColor(android.graphics.Color.parseColor("#555555"))
+                view.setBackgroundColor(android.graphics.Color.WHITE)
                 view.textSize = 16f
+                view.setPadding(32, 24, 32, 24)
                 return view
             }
         }
-        spinnerTipo.adapter = adapter
 
         spinnerTipo.adapter = adapter
+        spinnerTipo.setPopupBackgroundResource(android.R.color.white)
 
-        // 🔹 Botón Login
         btnLogin.setOnClickListener {
             val matricula = etMatricula.text.toString().trim()
             val password = etPassword.text.toString().trim()
@@ -57,7 +53,6 @@ class LoginActivity : AppCompatActivity() {
 
             val email = "$matricula@control.com"
 
-            // 🔹 Login con Firebase Auth
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -67,7 +62,6 @@ class LoginActivity : AppCompatActivity() {
                             return@addOnCompleteListener
                         }
 
-                        // 🔹 Leer tipo desde Realtime Database
                         database.child("usuarios").child(uid)
                             .addListenerForSingleValueEvent(object : ValueEventListener {
                                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -81,7 +75,6 @@ class LoginActivity : AppCompatActivity() {
                                     }
 
                                     val tipo = snapshot.child("tipo").getValue(String::class.java)?.trim()
-                                    Toast.makeText(this@LoginActivity, "Tipo: $tipo", Toast.LENGTH_SHORT).show() // Debug
 
                                     when (tipo) {
                                         "Alumno" -> startActivity(Intent(this@LoginActivity, AlumnoMainActivity::class.java))
@@ -115,7 +108,6 @@ class LoginActivity : AppCompatActivity() {
                 }
         }
 
-        // 🔹 Ir a registro
         tvRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }

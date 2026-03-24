@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="gris_spinner">#FF555555</color> <!-- <- gris sólido -->
+
+    <color name="primaryBlue">#4F6BED</color>
+    <color name="backgroundGray">#E6E6E6</color>
+    <color name="inputGray">#DADADA</color>
+    <color name="textBlack">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="gris_spinner">#FF555555</color>
+    <color name="textPrimary">#1C1C1C</color>
+    <color name="textSecondary">#333333</color>
+
 </resources>
