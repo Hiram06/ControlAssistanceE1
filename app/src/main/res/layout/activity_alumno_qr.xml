@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/backgroundGray">
+
+    <!-- HEADER -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="@color/primaryBlue"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CONTROL-ASSISTENCE"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CA"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+
+    <!-- BOTÓN VOLVER -->
+    <Button
+        android:id="@+id/btnVolver"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:text="‹ Volver"
+        android:backgroundTint="@color/primaryBlue"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"
+        android:layout_margin="16dp"/>
+
+    <!-- ÁREA DE CÁMARA (placeholder) -->
+    <FrameLayout
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@color/inputGray">
+
+        <!-- Esquinas del escáner -->
+        <View
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="top|start"
+            android:background="@drawable/corner_tl"/>
+
+        <View
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="top|end"
+            android:background="@drawable/corner_tr"/>
+
+        <View
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom|start"
+            android:background="@drawable/corner_bl"/>
+
+        <View
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom|end"
+            android:background="@drawable/corner_br"/>
+
+        <!-- Aquí va el PreviewView de CameraX -->
+        <androidx.camera.view.PreviewView
+            android:id="@+id/previewView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </FrameLayout>
+
+    <!-- BOTÓN ESCANEAR -->
+    <Button
+        android:id="@+id/btnEscanear"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:text="Escanear"
+        android:backgroundTint="@color/primaryBlue"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"/>
+
+</LinearLayout>
