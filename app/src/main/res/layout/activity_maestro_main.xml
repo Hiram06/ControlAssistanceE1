@@ -5,6 +5,22 @@
     android:orientation="vertical"
     android:background="#E6E6E6">
 
+    <Button
+        android:id="@+id/btnCrearGrupo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="+ Crear nuevo grupo"
+        android:layout_margin="16dp"/>
+
+    <TextView
+        android:id="@+id/tvSinGrupos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No tienes grupos aún. Crea uno."
+        android:gravity="center"
+        android:padding="32dp"
+        android:visibility="gone"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerGrupos"
         android:layout_width="match_parent"

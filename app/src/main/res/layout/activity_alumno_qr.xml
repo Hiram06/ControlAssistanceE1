@@ -44,11 +44,11 @@
         android:textAllCaps="false"
         android:layout_margin="16dp"/>
 
-    <!-- ÁREA DE CÁMARA (placeholder) -->
+    <!-- ÁREA DE CÁMARA -->
     <FrameLayout
-        android:layout_width="260dp"
-        android:layout_height="260dp"
-        android:layout_gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_marginTop="20dp"
         android:background="@color/inputGray">
 
@@ -77,24 +77,12 @@
             android:layout_gravity="bottom|end"
             android:background="@drawable/corner_br"/>
 
-        <!-- Aquí va el PreviewView de CameraX -->
+        <!-- PreviewView de CameraX -->
         <androidx.camera.view.PreviewView
             android:id="@+id/previewView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
     </FrameLayout>
-
-    <!-- BOTÓN ESCANEAR -->
-    <Button
-        android:id="@+id/btnEscanear"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:text="Escanear"
-        android:backgroundTint="@color/primaryBlue"
-        android:textColor="@android:color/white"
-        android:textAllCaps="false"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"/>
 
 </LinearLayout>

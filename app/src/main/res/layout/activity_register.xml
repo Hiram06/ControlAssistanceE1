@@ -93,12 +93,14 @@
                 android:textColorHint="#555555"
                 android:layout_marginBottom="20dp"/>
 
+
             <Spinner
                 android:id="@+id/spinnerTipoRegister"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:background="#DADADA"
                 android:layout_marginBottom="30dp"/>
+
 
             <Button
                 android:id="@+id/btnRegistrar"

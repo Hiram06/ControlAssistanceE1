@@ -23,7 +23,7 @@
     </RelativeLayout>
 
     <Button
-        android:id="@+id/btnVolverReporte"
+        android:id="@+id/btnVolverPdf"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:text="‹ Volver"
@@ -33,55 +33,32 @@
         android:layout_margin="16dp"/>
 
     <TextView
-        android:id="@+id/tvTituloReporteGrupo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:text="Reporte de asistencia"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:padding="8dp"/>
+        android:padding="24dp"/>
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp">
+        android:text="Presiona el botón para generar y guardar tu reporte en PDF en la carpeta de Descargas."
+        android:textSize="14sp"
+        android:gravity="center"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="24dp"/>
 
-        <Button
-            android:id="@+id/btnEliminarFaltas"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Eliminar con 2+ faltas"
-            android:backgroundTint="#C0392B"
-            android:textColor="@android:color/white"
-            android:textAllCaps="false"
-            android:layout_marginEnd="4dp"/>
-
-        <Button
-            android:id="@+id/btnPdfGrupo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Generar PDF"
-            android:backgroundTint="@color/primaryBlue"
-            android:textColor="@android:color/white"
-            android:textAllCaps="false"
-            android:layout_marginStart="4dp"/>
-
-    </LinearLayout>
-
-    <ScrollView
+    <Button
+        android:id="@+id/btnGenerarPdf"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="8dp">
-
-        <LinearLayout
-            android:id="@+id/llAlumnos"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"/>
-
-    </ScrollView>
+        android:layout_height="wrap_content"
+        android:text="Generar y guardar PDF"
+        android:backgroundTint="@color/primaryBlue"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"
+        android:layout_margin="16dp"/>
 
 </LinearLayout>

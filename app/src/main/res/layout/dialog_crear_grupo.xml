@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/etNombreGrupo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre del grupo"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/etMateriaGrupo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Materia"
+        android:inputType="text"
+        android:layout_marginTop="12dp"/>
+
+</LinearLayout>

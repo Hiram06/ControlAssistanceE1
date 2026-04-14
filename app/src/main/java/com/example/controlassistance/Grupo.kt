@@ -1,6 +1,8 @@
 package com.example.controlassistance
 
 data class Grupo(
-    val nombre: String,
-    val materia: String
+    val id: String = "",
+    val nombre: String = "",
+    val materia: String = "",
+    val maestroId: String = ""
 )
