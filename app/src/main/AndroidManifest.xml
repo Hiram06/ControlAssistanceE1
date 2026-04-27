@@ -58,6 +58,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".AdminMainActivity" android:exported="false"/>
+        <activity android:name=".AdminCrearGrupoActivity" android:exported="false"/>
+        <activity android:name=".AdminUsuariosActivity" android:exported="false"/>
+        <activity android:name=".AdminInscribirAlumnosActivity" android:exported="false"/>
+        <activity android:name=".CalificacionesActivity" android:exported="false"/>
+        <activity android:name=".ConfigurarCalificacionesActivity" android:exported="false"/>
         <activity
             android:name=".GenerarPdfAlumnoActivity"
             android:exported="false"/>

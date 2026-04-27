@@ -11,50 +11,63 @@
         android:id="@+id/tvNombreGrupo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Grupo 001"
+        android:text="Grupo"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="#000000"
-        android:layout_marginBottom="12dp"/>
+        android:layout_marginBottom="8dp"/>
 
     <TextView
         android:id="@+id/tvIdGrupo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ID: "
+        android:text="ID: (toca para copiar)"
         android:textSize="12sp"
         android:textColor="#888888"
-        android:layout_marginBottom="12dp"/>
+        android:layout_marginBottom="12dp"
+        android:visibility="gone"/>
 
     <LinearLayout
+        android:id="@+id/llBotones"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <Button
             android:id="@+id/btnAsistencia"
             android:layout_width="0dp"
-            android:layout_height="45dp"
+            android:layout_height="wrap_content"
+            android:minHeight="45dp"
             android:layout_weight="1"
             android:text="Asistencia"
             android:textAllCaps="false"
             android:backgroundTint="#4F6BED"
             android:textColor="#FFFFFF"
-            />
-
-        <Space
-            android:layout_width="10dp"
-            android:layout_height="wrap_content"/>
+            android:layout_marginEnd="5dp"/>
 
         <Button
             android:id="@+id/btnReporte"
             android:layout_width="0dp"
-            android:layout_height="45dp"
+            android:layout_height="wrap_content"
+            android:minHeight="45dp"
             android:layout_weight="1"
             android:text="Reporte"
             android:textAllCaps="false"
             android:backgroundTint="#4F6BED"
             android:textColor="#FFFFFF"/>
+
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnEliminarGrupo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Eliminar grupo"
+        android:backgroundTint="#C0392B"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"/>
 
 </LinearLayout>

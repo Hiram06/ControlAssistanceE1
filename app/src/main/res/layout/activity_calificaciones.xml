@@ -23,9 +23,9 @@
     </RelativeLayout>
 
     <Button
-        android:id="@+id/btnVolverReporte"
+        android:id="@+id/btnVolverCal"
         android:layout_width="wrap_content"
-        android:layout_height="36dp"
+        android:layout_height="wrap_content"
         android:text="‹ Volver"
         android:backgroundTint="@color/primaryBlue"
         android:textColor="@android:color/white"
@@ -33,10 +33,10 @@
         android:layout_margin="12dp"/>
 
     <TextView
-        android:id="@+id/tvTituloReporteGrupo"
+        android:id="@+id/tvTituloCalificaciones"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         android:gravity="center"
         android:padding="8dp"/>
@@ -48,38 +48,36 @@
         android:padding="8dp">
 
         <Button
-            android:id="@+id/btnEliminarFaltas"
+            android:id="@+id/btnConfigurarCal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Eliminar 2+ faltas"
-            android:backgroundTint="#C0392B"
+            android:text="Configurar"
+            android:backgroundTint="#E67E22"
             android:textColor="@android:color/white"
             android:textAllCaps="false"
             android:layout_marginEnd="4dp"/>
 
         <Button
-            android:id="@+id/btnPdfGrupo"
+            android:id="@+id/btnGuardarCal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="PDF Asistencia"
-            android:backgroundTint="@color/primaryBlue"
-            android:textColor="@android:color/white"
-            android:textAllCaps="false"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"/>
-
-        <Button
-            android:id="@+id/btnCalificaciones"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Calificaciones"
+            android:text="Guardar"
             android:backgroundTint="#27AE60"
             android:textColor="@android:color/white"
             android:textAllCaps="false"
-            android:layout_marginStart="4dp"/>
+            android:layout_marginEnd="4dp"/>
+
+        <Button
+            android:id="@+id/btnPdfCal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="PDF"
+            android:backgroundTint="@color/primaryBlue"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"/>
 
     </LinearLayout>
 
@@ -92,7 +90,7 @@
             android:layout_height="match_parent">
 
             <TableLayout
-                android:id="@+id/tableAsistencia"
+                android:id="@+id/tableCalificaciones"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"/>

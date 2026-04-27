@@ -1,6 +1,7 @@
 package com.example.controlassistance
 
 import android.content.ContentValues
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
@@ -9,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.Gravity
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +26,8 @@ data class RowAlumno(
     val nombre: String,
     val matricula: String,
     var presentes: Int,
-    var faltas: Int
+    var faltas: Int,
+    val asistenciasPorFecha: MutableMap<String, Boolean> = mutableMapOf()
 )
 
 class ReporteGrupoActivity : AppCompatActivity() {
@@ -33,7 +36,8 @@ class ReporteGrupoActivity : AppCompatActivity() {
     private val filas   = mutableListOf<RowAlumno>()
     private lateinit var grupoId: String
     private lateinit var grupoNombre: String
-    private lateinit var llAlumnos: LinearLayout
+    private lateinit var tableLayout: TableLayout
+    private val todasFechas = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +47,17 @@ class ReporteGrupoActivity : AppCompatActivity() {
         grupoNombre = intent.getStringExtra("grupoNombre") ?: ""
 
         findViewById<TextView>(R.id.tvTituloReporteGrupo).text = grupoNombre
-        llAlumnos = findViewById(R.id.llAlumnos)
+        tableLayout = findViewById(R.id.tableAsistencia)
 
         findViewById<Button>(R.id.btnVolverReporte).setOnClickListener { finish() }
         findViewById<Button>(R.id.btnEliminarFaltas).setOnClickListener { confirmarEliminar() }
         findViewById<Button>(R.id.btnPdfGrupo).setOnClickListener { generarPdfGrupo() }
+        findViewById<Button>(R.id.btnCalificaciones).setOnClickListener {
+            val intent = Intent(this, CalificacionesActivity::class.java)
+            intent.putExtra("grupoId", grupoId)
+            intent.putExtra("grupoNombre", grupoNombre)
+            startActivity(intent)
+        }
 
         cargarReporte()
     }
@@ -57,6 +67,7 @@ class ReporteGrupoActivity : AppCompatActivity() {
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     filas.clear()
+                    todasFechas.clear()
                     val uidList = snapshot.children.mapNotNull { it.key }.filter { it.isNotEmpty() }
                     if (uidList.isEmpty()) { renderTabla(); return }
 
@@ -71,13 +82,21 @@ class ReporteGrupoActivity : AppCompatActivity() {
                                         .addListenerForSingleValueEvent(object : ValueEventListener {
                                             override fun onDataChange(asSnap: DataSnapshot) {
                                                 var presentes = 0; var faltas = 0
+                                                val asistenciasPorFecha = mutableMapOf<String, Boolean>()
                                                 for (dia in asSnap.children) {
-                                                    if (dia.child("presente").getValue(Boolean::class.java) == true)
-                                                        presentes++ else faltas++
+                                                    val fecha = dia.key ?: continue
+                                                    val presente = dia.child("presente").getValue(Boolean::class.java) ?: false
+                                                    asistenciasPorFecha[fecha] = presente
+                                                    if (!todasFechas.contains(fecha)) todasFechas.add(fecha)
+                                                    if (presente) presentes++ else faltas++
                                                 }
-                                                filas.add(RowAlumno(uid, nombre, matricula, presentes, faltas))
+                                                filas.add(RowAlumno(uid, nombre, matricula, presentes, faltas, asistenciasPorFecha))
                                                 cargados++
-                                                if (cargados == uidList.size) { filas.sortBy { it.nombre }; renderTabla() }
+                                                if (cargados == uidList.size) {
+                                                    todasFechas.sort()
+                                                    filas.sortBy { it.nombre }
+                                                    renderTabla()
+                                                }
                                             }
                                             override fun onCancelled(e: DatabaseError) { cargados++ }
                                         })
@@ -91,36 +110,89 @@ class ReporteGrupoActivity : AppCompatActivity() {
     }
 
     private fun renderTabla() {
-        llAlumnos.removeAllViews()
-        if (filas.isEmpty()) {
-            val tv = TextView(this).apply {
-                text = "No hay alumnos registrados en este grupo."
-                textSize = 14f
-                setTextColor(Color.GRAY)
-                gravity = android.view.Gravity.CENTER
-                setPadding(16, 40, 16, 40)
+        tableLayout.removeAllViews()
+
+        val colorHeader  = Color.parseColor("#4F6BED")
+        val colorAlerta  = Color.parseColor("#FFDDDD")
+        val colorNormal  = Color.parseColor("#DDFFDD")
+        val colorAlterno = Color.parseColor("#F5F5F5")
+
+        // Fila de encabezados
+        val headerRow = TableRow(this)
+        headerRow.setBackgroundColor(colorHeader)
+
+        fun makeHeader(text: String): TextView {
+            return TextView(this).apply {
+                this.text = text
+                setTextColor(Color.WHITE)
+                setTypeface(null, Typeface.BOLD)
+                textSize = 11f
+                gravity = Gravity.CENTER
+                setPadding(8, 10, 8, 10)
+                minWidth = 80
             }
-            llAlumnos.addView(tv); return
         }
-        for (fila in filas) {
+
+        headerRow.addView(makeHeader("Matrícula"))
+        headerRow.addView(makeHeader("Nombre"))
+        for (fecha in todasFechas) {
+            val fmt = SimpleDateFormat("dd/MM", Locale.getDefault())
+            val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(fecha)
+            headerRow.addView(makeHeader(if (date != null) fmt.format(date) else fecha))
+        }
+        headerRow.addView(makeHeader("Total"))
+        headerRow.addView(makeHeader("%"))
+        tableLayout.addView(headerRow)
+
+        // Filas de alumnos
+        for ((i, fila) in filas.withIndex()) {
             val total = fila.presentes + fila.faltas
             val pct   = if (total > 0) fila.presentes * 100 / total else 0
-            val card  = layoutInflater.inflate(R.layout.item_alumno_reporte, llAlumnos, false)
-            card.findViewById<TextView>(R.id.tvNombreAlumno).text = "${fila.nombre} (${fila.matricula})"
-            card.findViewById<TextView>(R.id.tvAsistenciaAlumno).text =
-                "Asistencias: ${fila.presentes}/$total ($pct%)  |  Faltas: ${fila.faltas}"
-            if (fila.faltas >= 2) {
-                card.setBackgroundColor(Color.parseColor("#FFDDDD"))
-                card.findViewById<TextView>(R.id.tvAlertaAlumno).visibility = android.view.View.VISIBLE
-            } else {
-                card.setBackgroundColor(Color.parseColor("#DDFFDD"))
-                card.findViewById<TextView>(R.id.tvAlertaAlumno).visibility = android.view.View.GONE
+            val row   = TableRow(this)
+            row.setBackgroundColor(if (fila.faltas >= 2) colorAlerta else if (i % 2 == 0) colorNormal else colorAlterno)
+
+            fun makeCell(text: String, bold: Boolean = false, color: Int = Color.BLACK): TextView {
+                return TextView(this).apply {
+                    this.text = text
+                    setTextColor(color)
+                    if (bold) setTypeface(null, Typeface.BOLD)
+                    textSize = 11f
+                    gravity = Gravity.CENTER
+                    setPadding(8, 8, 8, 8)
+                    minWidth = 80
+                }
             }
-            val params = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
-            ).also { it.setMargins(0, 0, 0, 10) }
-            card.layoutParams = params
-            llAlumnos.addView(card)
+
+            row.addView(makeCell(fila.matricula, bold = true))
+            row.addView(makeCell(fila.nombre))
+
+            for (fecha in todasFechas) {
+                val presente = fila.asistenciasPorFecha[fecha]
+                val (symbol, color) = when (presente) {
+                    true  -> Pair("✓", Color.parseColor("#1B5E20"))
+                    false -> Pair("✗", Color.parseColor("#B71C1C"))
+                    null  -> Pair("—", Color.GRAY)
+                }
+                row.addView(makeCell(symbol, color = color))
+            }
+
+            row.addView(makeCell("${fila.presentes}/$total"))
+            row.addView(makeCell("$pct%", bold = fila.faltas >= 2,
+                color = if (fila.faltas >= 2) Color.parseColor("#B71C1C") else Color.parseColor("#1B5E20")))
+
+            tableLayout.addView(row)
+        }
+
+        if (filas.isEmpty()) {
+            val emptyRow = TableRow(this)
+            emptyRow.addView(TextView(this).apply {
+                text = "No hay alumnos registrados"
+                setTextColor(Color.GRAY)
+                textSize = 14f
+                gravity = Gravity.CENTER
+                setPadding(16, 40, 16, 40)
+            })
+            tableLayout.addView(emptyRow)
         }
     }
 
@@ -146,7 +218,7 @@ class ReporteGrupoActivity : AppCompatActivity() {
     private fun generarPdfGrupo() {
         val fileName = "Reporte_Grupo_${SimpleDateFormat("yyyyMMdd_HHmm", Locale.getDefault()).format(Date())}.pdf"
         val doc      = PdfDocument()
-        val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create()
+        val pageInfo = PdfDocument.PageInfo.Builder(842, 595, 1).create() // Horizontal
         val page     = doc.startPage(pageInfo)
         val canvas   = page.canvas
         val bold     = Paint().apply { isAntiAlias = true; typeface = Typeface.DEFAULT_BOLD }
@@ -154,49 +226,53 @@ class ReporteGrupoActivity : AppCompatActivity() {
         val line     = Paint().apply { color = Color.LTGRAY; strokeWidth = 1f }
 
         val hPaint = Paint().apply { color = Color.parseColor("#4F6BED") }
-        canvas.drawRect(0f, 0f, 595f, 80f, hPaint)
+        canvas.drawRect(0f, 0f, 842f, 60f, hPaint)
         bold.color = Color.WHITE; bold.textSize = 18f
-        canvas.drawText("LISTA DE ASISTENCIA", 160f, 52f, bold)
+        canvas.drawText("LISTA DE ASISTENCIA — $grupoNombre", 40f, 40f, bold)
 
-        normal.color = Color.BLACK; normal.textSize = 12f
         val fecha = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
-        canvas.drawText("Grupo: $grupoNombre", 60f, 100f, normal)
-        canvas.drawText("Fecha: $fecha", 60f, 118f, normal)
-        canvas.drawLine(60f, 128f, 535f, 128f, line)
+        normal.color = Color.WHITE; normal.textSize = 11f
+        canvas.drawText("Generado: $fecha", 650f, 40f, normal)
 
-        val conProblema = filas.count { it.faltas >= 2 }
-        normal.color = Color.DKGRAY; normal.textSize = 11f
-        canvas.drawText("Total de alumnos: ${filas.size}   |   Con 2+ faltas: $conProblema", 60f, 148f, normal)
-        canvas.drawLine(60f, 158f, 535f, 158f, line)
-
+        // Encabezados tabla
         val thBg = Paint().apply { color = Color.parseColor("#E8ECF8") }
-        canvas.drawRect(55f, 165f, 540f, 183f, thBg)
-        bold.color = Color.BLACK; bold.textSize = 11f
-        canvas.drawText("#", 62f, 178f, bold)
-        canvas.drawText("Nombre", 80f, 178f, bold)
-        canvas.drawText("Matricula", 280f, 178f, bold)
-        canvas.drawText("Asist.", 380f, 178f, bold)
-        canvas.drawText("Faltas", 430f, 178f, bold)
-        canvas.drawText("%", 495f, 178f, bold)
+        canvas.drawRect(30f, 70f, 812f, 90f, thBg)
+        bold.color = Color.BLACK; bold.textSize = 10f
+        var x = 35f
+        canvas.drawText("Matrícula", x, 84f, bold); x += 80f
+        canvas.drawText("Nombre", x, 84f, bold); x += 160f
+        for (f in todasFechas) {
+            val fmt = SimpleDateFormat("dd/MM", Locale.getDefault())
+            val d = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(f)
+            canvas.drawText(if (d != null) fmt.format(d) else f, x, 84f, bold)
+            x += 40f
+        }
+        canvas.drawText("Total", x, 84f, bold); x += 50f
+        canvas.drawText("%", x, 84f, bold)
 
+        // Filas
         normal.textSize = 10f
-        var y = 198f
+        var y = 105f
         for ((i, fila) in filas.withIndex()) {
             val tot = fila.presentes + fila.faltas
             val pct = if (tot > 0) fila.presentes * 100 / tot else 0
             if (i % 2 == 0) {
                 val rowBg = Paint().apply { color = Color.parseColor("#FAFAFA") }
-                canvas.drawRect(55f, y - 13f, 540f, y + 5f, rowBg)
+                canvas.drawRect(30f, y - 12f, 812f, y + 5f, rowBg)
             }
             normal.color = if (fila.faltas >= 2) Color.parseColor("#C0392B") else Color.DKGRAY
-            canvas.drawText("${i + 1}", 62f, y, normal)
-            canvas.drawText(fila.nombre.take(26), 80f, y, normal)
-            canvas.drawText(fila.matricula, 280f, y, normal)
-            canvas.drawText("${fila.presentes}/$tot", 380f, y, normal)
-            canvas.drawText("${fila.faltas}", 435f, y, normal)
-            canvas.drawText("$pct%", 495f, y, normal)
+            x = 35f
+            canvas.drawText(fila.matricula, x, y, normal); x += 80f
+            canvas.drawText(fila.nombre.take(20), x, y, normal); x += 160f
+            for (f in todasFechas) {
+                val presente = fila.asistenciasPorFecha[f]
+                canvas.drawText(when (presente) { true -> "✓"; false -> "✗"; else -> "—" }, x, y, normal)
+                x += 40f
+            }
+            canvas.drawText("${fila.presentes}/$tot", x, y, normal); x += 50f
+            canvas.drawText("$pct%", x, y, normal)
             y += 20f
-            if (y > 815f) break
+            if (y > 570f) break
         }
 
         doc.finishPage(page)

@@ -23,9 +23,9 @@
     </RelativeLayout>
 
     <Button
-        android:id="@+id/btnVolverReporte"
+        android:id="@+id/btnVolverConfig"
         android:layout_width="wrap_content"
-        android:layout_height="36dp"
+        android:layout_height="wrap_content"
         android:text="‹ Volver"
         android:backgroundTint="@color/primaryBlue"
         android:textColor="@android:color/white"
@@ -33,10 +33,43 @@
         android:layout_margin="12dp"/>
 
     <TextView
-        android:id="@+id/tvTituloReporteGrupo"
+        android:id="@+id/tvTituloConfig"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="8dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nombre | % | Cantidad"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:textColor="#888888"
+        android:paddingBottom="8dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="12dp">
+
+        <LinearLayout
+            android:id="@+id/llComponentes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/tvTotalPorcentaje"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Total: 0%"
+        android:textSize="16sp"
         android:textStyle="bold"
         android:gravity="center"
         android:padding="8dp"/>
@@ -45,60 +78,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:padding="12dp">
 
         <Button
-            android:id="@+id/btnEliminarFaltas"
+            android:id="@+id/btnAgregarComponente"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Eliminar 2+ faltas"
-            android:backgroundTint="#C0392B"
-            android:textColor="@android:color/white"
-            android:textAllCaps="false"
-            android:layout_marginEnd="4dp"/>
-
-        <Button
-            android:id="@+id/btnPdfGrupo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="PDF Asistencia"
-            android:backgroundTint="@color/primaryBlue"
-            android:textColor="@android:color/white"
-            android:textAllCaps="false"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"/>
-
-        <Button
-            android:id="@+id/btnCalificaciones"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Calificaciones"
+            android:text="+ Agregar"
             android:backgroundTint="#27AE60"
             android:textColor="@android:color/white"
             android:textAllCaps="false"
-            android:layout_marginStart="4dp"/>
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/btnGuardarConfig"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Guardar config"
+            android:backgroundTint="@color/primaryBlue"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"/>
 
     </LinearLayout>
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <TableLayout
-                android:id="@+id/tableAsistencia"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"/>
-
-        </ScrollView>
-
-    </HorizontalScrollView>
 
 </LinearLayout>
