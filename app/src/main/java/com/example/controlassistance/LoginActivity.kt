@@ -67,7 +67,18 @@ class LoginActivity : AppCompatActivity() {
                                         auth.signOut()
                                         return
                                     }
-                                    when (snapshot.child("tipo").getValue(String::class.java)?.trim()) {
+                                    val tipoReal = snapshot.child("tipo").getValue(String::class.java)?.trim()
+                                    val tipoSeleccionado = spinnerTipo.selectedItem.toString()
+
+                                    if (tipoReal != tipoSeleccionado) {
+                                        Toast.makeText(this@LoginActivity,
+                                            "Tipo de usuario incorrecto. Selecciona el tipo correcto.",
+                                            Toast.LENGTH_LONG).show()
+                                        auth.signOut()
+                                        return
+                                    }
+
+                                    when (tipoReal) {
                                         "Admin"   -> startActivity(Intent(this@LoginActivity, AdminMainActivity::class.java))
                                         "Maestro" -> startActivity(Intent(this@LoginActivity, MaestroMainActivity::class.java))
                                         "Alumno"  -> startActivity(Intent(this@LoginActivity, AlumnoMainActivity::class.java))

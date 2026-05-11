@@ -45,34 +45,75 @@ class AlumnoMainActivity : AppCompatActivity() {
             mostrarDialogoUnirse()
         }
 
+        findViewById<Button>(R.id.btnCerrarSesionAlumno).setOnClickListener {
+            auth.signOut()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
+
         cargarGrupos()
+        verificarSolicitudes()
     }
 
     private fun cargarGrupos() {
         val uid = auth.currentUser?.uid ?: return
-        db.child("grupos")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    grupos.clear()
-                    for (snap in snapshot.children) {
-                        val tieneAlumno = snap.child("alumnos").child(uid).exists()
-                        if (tieneAlumno) {
-                            grupos.add(
-                                Grupo(
-                                    id        = snap.key ?: "",
-                                    nombre    = snap.child("nombre").getValue(String::class.java) ?: "",
-                                    materia   = snap.child("materia").getValue(String::class.java) ?: "",
-                                    maestroId = snap.child("maestroId").getValue(String::class.java) ?: ""
-                                )
-                            )
+        db.child("grupos").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                grupos.clear()
+                for (snap in snapshot.children) {
+                    val tieneAlumno = snap.child("alumnos").child(uid).exists()
+                    if (tieneAlumno) {
+                        grupos.add(Grupo(
+                            id        = snap.key ?: "",
+                            nombre    = snap.child("nombre").getValue(String::class.java) ?: "",
+                            materia   = snap.child("materia").getValue(String::class.java) ?: "",
+                            maestroId = snap.child("maestroId").getValue(String::class.java) ?: ""
+                        ))
+                    }
+                }
+                adapter.notifyDataSetChanged()
+                val tvVacio = findViewById<TextView>(R.id.tvSinGruposAlumno)
+                tvVacio.visibility = if (grupos.isEmpty()) android.view.View.VISIBLE else android.view.View.GONE
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
+    private fun verificarSolicitudes() {
+        val uid = auth.currentUser?.uid ?: return
+        db.child("solicitudes").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val tvEstado = findViewById<TextView>(R.id.tvEstadoSolicitud)
+                var pendiente = false
+                var rechazada = false
+
+                for (grupoSnap in snapshot.children) {
+                    val miSolicitud = grupoSnap.child(uid)
+                    if (miSolicitud.exists()) {
+                        val estado = miSolicitud.child("estado").getValue(String::class.java) ?: ""
+                        when (estado) {
+                            "pendiente" -> pendiente = true
+                            "rechazada" -> rechazada = true
                         }
                     }
-                    adapter.notifyDataSetChanged()
-                    val tvVacio = findViewById<TextView>(R.id.tvSinGruposAlumno)
-                    tvVacio.visibility = if (grupos.isEmpty()) android.view.View.VISIBLE else android.view.View.GONE
                 }
-                override fun onCancelled(error: DatabaseError) {}
-            })
+
+                when {
+                    rechazada -> {
+                        tvEstado.visibility = android.view.View.VISIBLE
+                        tvEstado.text = "❌ Una de tus solicitudes fue rechazada."
+                        tvEstado.setTextColor(android.graphics.Color.parseColor("#B71C1C"))
+                    }
+                    pendiente -> {
+                        tvEstado.visibility = android.view.View.VISIBLE
+                        tvEstado.text = "⏳ Tienes solicitudes pendientes de aprobación."
+                        tvEstado.setTextColor(android.graphics.Color.parseColor("#E67E22"))
+                    }
+                    else -> tvEstado.visibility = android.view.View.GONE
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     private fun mostrarDialogoUnirse() {
@@ -82,10 +123,10 @@ class AlumnoMainActivity : AppCompatActivity() {
             setPadding(48, 32, 48, 32)
         }
         AlertDialog.Builder(this)
-            .setTitle("Unirse a un grupo")
-            .setMessage("Pide el ID del grupo a tu maestro")
+            .setTitle("Solicitar unirse a un grupo")
+            .setMessage("Ingresa el ID del grupo que te dio tu maestro")
             .setView(input)
-            .setPositiveButton("Unirse") { _, _ ->
+            .setPositiveButton("Enviar solicitud") { _, _ ->
                 val grupoId = input.text.toString().trim()
                 if (grupoId.isEmpty()) {
                     Toast.makeText(this, "Escribe el ID del grupo", Toast.LENGTH_SHORT).show()
@@ -95,13 +136,52 @@ class AlumnoMainActivity : AppCompatActivity() {
                     .addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             if (!snapshot.exists()) {
-                                Toast.makeText(this@AlumnoMainActivity, "Grupo no encontrado", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@AlumnoMainActivity,
+                                    "Grupo no encontrado", Toast.LENGTH_SHORT).show()
                                 return
                             }
-                            db.child("grupos").child(grupoId).child("alumnos").child(uid).setValue(true)
-                                .addOnSuccessListener {
-                                    Toast.makeText(this@AlumnoMainActivity, "Te uniste al grupo exitosamente", Toast.LENGTH_SHORT).show()
-                                }
+                            // Verificar si ya está inscrito
+                            if (snapshot.child("alumnos").child(uid).exists()) {
+                                Toast.makeText(this@AlumnoMainActivity,
+                                    "Ya estás inscrito en este grupo", Toast.LENGTH_SHORT).show()
+                                return
+                            }
+                            // Verificar si ya tiene solicitud pendiente
+                            db.child("solicitudes").child(grupoId).child(uid)
+                                .addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(solSnap: DataSnapshot) {
+                                        if (solSnap.exists()) {
+                                            val estado = solSnap.child("estado").getValue(String::class.java) ?: ""
+                                            if (estado == "pendiente") {
+                                                Toast.makeText(this@AlumnoMainActivity,
+                                                    "Ya tienes una solicitud pendiente en este grupo",
+                                                    Toast.LENGTH_SHORT).show()
+                                                return
+                                            }
+                                        }
+                                        // Obtener nombre del alumno
+                                        db.child("usuarios").child(uid).child("nombre")
+                                            .addListenerForSingleValueEvent(object : ValueEventListener {
+                                                override fun onDataChange(nombreSnap: DataSnapshot) {
+                                                    val nombre = nombreSnap.getValue(String::class.java) ?: ""
+                                                    val solicitud = mapOf(
+                                                        "alumnoId"  to uid,
+                                                        "nombre"    to nombre,
+                                                        "estado"    to "pendiente"
+                                                    )
+                                                    db.child("solicitudes").child(grupoId).child(uid)
+                                                        .setValue(solicitud)
+                                                        .addOnSuccessListener {
+                                                            Toast.makeText(this@AlumnoMainActivity,
+                                                                "Solicitud enviada. Espera la aprobación del maestro.",
+                                                                Toast.LENGTH_LONG).show()
+                                                        }
+                                                }
+                                                override fun onCancelled(e: DatabaseError) {}
+                                            })
+                                    }
+                                    override fun onCancelled(e: DatabaseError) {}
+                                })
                         }
                         override fun onCancelled(error: DatabaseError) {}
                     })

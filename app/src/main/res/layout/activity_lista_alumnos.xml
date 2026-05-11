@@ -20,45 +20,61 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_centerVertical="true"/>
-
-        <Button
-            android:id="@+id/btnCerrarSesionMaestro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Salir"
-            android:backgroundTint="#C0392B"
-            android:textColor="@android:color/white"
-            android:textAllCaps="false"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"/>
-
     </RelativeLayout>
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Mis grupos"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <Button
+            android:id="@+id/btnVolverLista"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="‹ Volver"
+            android:backgroundTint="@color/primaryBlue"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"/>
+
+        <Button
+            android:id="@+id/btnVerSolicitudes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Solicitudes"
+            android:backgroundTint="@color/primaryBlue"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"
+            android:layout_marginStart="12dp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvTituloLista"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="#000000"
-        android:paddingStart="16dp"
-        android:paddingTop="12dp"
-        android:paddingBottom="8dp"/>
-
-    <TextView
-        android:id="@+id/tvSinGrupos"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="No tienes grupos asignados. Contacta al administrador."
-        android:textColor="#000000"
         android:gravity="center"
-        android:padding="32dp"
-        android:visibility="gone"/>
+        android:padding="8dp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerGrupos"
+    <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp"/>
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TableLayout
+                android:id="@+id/tableListaAlumnos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"/>
+
+        </ScrollView>
+
+    </HorizontalScrollView>
 
 </LinearLayout>

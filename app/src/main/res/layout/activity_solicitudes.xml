@@ -23,7 +23,7 @@
     </RelativeLayout>
 
     <Button
-        android:id="@+id/btnVolverAsistencia"
+        android:id="@+id/btnVolverSolicitudes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="‹ Volver"
@@ -33,7 +33,7 @@
         android:layout_margin="12dp"/>
 
     <TextView
-        android:id="@+id/tvTituloAsistencia"
+        android:id="@+id/tvTituloSolicitudes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16sp"
@@ -42,22 +42,17 @@
         android:gravity="center"
         android:padding="8dp"/>
 
-    <ImageView
-        android:id="@+id/ivQRMaestro"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
-
-    <TextView
-        android:id="@+id/tvEstadoAsistencia"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Esperando escaneo..."
-        android:textSize="14sp"
-        android:textColor="#000000"
-        android:gravity="center"
-        android:padding="16dp"/>
+        android:layout_height="match_parent"
+        android:padding="12dp">
+
+        <LinearLayout
+            android:id="@+id/llSolicitudes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+
+    </ScrollView>
 
 </LinearLayout>

@@ -36,9 +36,21 @@ class MaestroMainActivity : AppCompatActivity() {
                 intent.putExtra("grupoId", grupo.id)
                 intent.putExtra("grupoNombre", "${grupo.nombre} — ${grupo.materia}")
                 startActivity(intent)
+            },
+            onListaClick = { grupo ->
+                val intent = Intent(this, ListaAlumnosActivity::class.java)
+                intent.putExtra("grupoId", grupo.id)
+                intent.putExtra("grupoNombre", "${grupo.nombre} — ${grupo.materia}")
+                startActivity(intent)
             }
         )
         recyclerView.adapter = adapter
+
+        findViewById<Button>(R.id.btnCerrarSesionMaestro).setOnClickListener {
+            auth.signOut()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
 
         cargarGrupos()
     }

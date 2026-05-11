@@ -5,7 +5,6 @@
     android:orientation="vertical"
     android:background="@color/backgroundGray">
 
-    <!-- HEADER -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="65dp"
@@ -23,12 +22,20 @@
             android:layout_centerVertical="true"/>
     </RelativeLayout>
 
-    <!-- BOTONES PRINCIPALES -->
+    <TextView
+        android:id="@+id/tvEstadoSolicitud"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:visibility="gone"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <Button
             android:id="@+id/btnEscanearQR"
@@ -39,7 +46,7 @@
             android:backgroundTint="@color/primaryBlue"
             android:textColor="@android:color/white"
             android:textAllCaps="false"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="4dp"/>
 
         <Button
             android:id="@+id/btnUnirseGrupo"
@@ -50,7 +57,19 @@
             android:backgroundTint="@color/primaryBlue"
             android:textColor="@android:color/white"
             android:textAllCaps="false"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"/>
+
+        <Button
+            android:id="@+id/btnCerrarSesionAlumno"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Salir"
+            android:backgroundTint="#C0392B"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"
+            android:layout_marginStart="4dp"/>
 
     </LinearLayout>
 
@@ -60,6 +79,7 @@
         android:text="Mis grupos"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:textColor="#000000"
         android:paddingStart="16dp"
         android:paddingBottom="8dp"/>
 
@@ -68,6 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="No estás en ningún grupo aún."
+        android:textColor="#000000"
         android:gravity="center"
         android:padding="32dp"
         android:visibility="gone"/>

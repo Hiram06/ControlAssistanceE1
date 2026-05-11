@@ -2,11 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.CAMERA"/>
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28"/>
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
-
 
     <application
         android:allowBackup="true"
@@ -17,57 +15,80 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ControlAssistance">
+
+
+
         <activity
-            android:name=".AlumnoAsistenciaActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:exported="false" />
-        <activity
-            android:name=".AlumnoQRActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MaestroReporteIndividualActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MaestroReporteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MaestroQRActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ReporteGrupoActivity"
-            android:exported="false" />
-        <activity
-            android:name=".TomarAsistenciaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MaestroMainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AlumnoMainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:exported="false" />
-        <activity
-            android:name=".LoginActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".AdminMainActivity" android:exported="false"/>
-        <activity android:name=".AdminCrearGrupoActivity" android:exported="false"/>
-        <activity android:name=".AdminUsuariosActivity" android:exported="false"/>
-        <activity android:name=".AdminInscribirAlumnosActivity" android:exported="false"/>
-        <activity android:name=".CalificacionesActivity" android:exported="false"/>
-        <activity android:name=".ConfigurarCalificacionesActivity" android:exported="false"/>
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".AlumnoMainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:exported="false"/>
+        <activity
+            android:name=".AlumnoAsistenciaActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:exported="false"/>
+        <activity
+            android:name=".AlumnoQRActivity"
+            android:exported="false"/>
         <activity
             android:name=".GenerarPdfAlumnoActivity"
             android:exported="false"/>
+        <activity
+            android:name=".MaestroMainActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".MaestroQRActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".MaestroReporteActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".MaestroReporteIndividualActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".TomarAsistenciaActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ReporteGrupoActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ListaAlumnosActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".AdminMainActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".AdminCrearGrupoActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".AdminUsuariosActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".AdminInscribirAlumnosActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".CalificacionesActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ConfigurarCalificacionesActivity"
+            android:exported="false"/>
+
+        <activity android:name=".SolicitudesActivity" android:exported="false"/>
+
     </application>
 
 </manifest>
