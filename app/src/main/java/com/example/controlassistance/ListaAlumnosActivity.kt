@@ -36,6 +36,12 @@ class ListaAlumnosActivity : AppCompatActivity() {
             intent.putExtra("grupoNombre", grupoNombre)
             startActivity(intent)
         }
+        findViewById<Button>(R.id.btnCalificacionesLista).setOnClickListener {
+            val intent = Intent(this, CalificacionesActivity::class.java)
+            intent.putExtra("grupoId", grupoId)
+            intent.putExtra("grupoNombre", grupoNombre)
+            startActivity(intent)
+        }
 
         cargarDatos()
         escucharSolicitudes()

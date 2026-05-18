@@ -52,12 +52,6 @@ class ReporteGrupoActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnVolverReporte).setOnClickListener { finish() }
         findViewById<Button>(R.id.btnEliminarFaltas).setOnClickListener { confirmarEliminar() }
         findViewById<Button>(R.id.btnPdfGrupo).setOnClickListener { generarPdfGrupo() }
-        findViewById<Button>(R.id.btnCalificaciones).setOnClickListener {
-            val intent = Intent(this, CalificacionesActivity::class.java)
-            intent.putExtra("grupoId", grupoId)
-            intent.putExtra("grupoNombre", grupoNombre)
-            startActivity(intent)
-        }
 
         cargarReporte()
     }
@@ -111,6 +105,22 @@ class ReporteGrupoActivity : AppCompatActivity() {
 
     private fun renderTabla() {
         tableLayout.removeAllViews()
+
+        // ── Resumen del grupo ──────────────────────────────────────────────
+        val totalAlumnos    = filas.size
+        val conMasFaltas    = filas.count { it.faltas >= 2 }
+        val diasRegistrados = todasFechas.size
+        val promedioAsist   = if (filas.isNotEmpty()) {
+            filas.map { f ->
+                val tot = f.presentes + f.faltas
+                if (tot > 0) f.presentes * 100 / tot else 0
+            }.average().toInt()
+        } else 0
+
+        findViewById<TextView>(R.id.tvResumenAlumnos).text  = "Alumnos\n$totalAlumnos"
+        findViewById<TextView>(R.id.tvResumenFaltas).text   = "Con 2+ faltas\n$conMasFaltas"
+        findViewById<TextView>(R.id.tvResumenPromedio).text = "Promedio grupo\n$promedioAsist%"
+        findViewById<TextView>(R.id.tvResumenDias).text     = "Dias registrados\n$diasRegistrados"
 
         val colorHeader  = Color.parseColor("#4F6BED")
         val colorAlerta  = Color.parseColor("#FFDDDD")
@@ -260,7 +270,7 @@ class ReporteGrupoActivity : AppCompatActivity() {
                 val rowBg = Paint().apply { color = Color.parseColor("#FAFAFA") }
                 canvas.drawRect(30f, y - 12f, 812f, y + 5f, rowBg)
             }
-            normal.color = if (fila.faltas >= 2) Color.parseColor("#C0392B") else Color.DKGRAY
+            normal.color = if (fila.faltas >= 2) Color.parseColor("#C0392B") else Color.BLACK
             x = 35f
             canvas.drawText(fila.matricula, x, y, normal); x += 80f
             canvas.drawText(fila.nombre.take(20), x, y, normal); x += 160f

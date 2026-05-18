@@ -45,7 +45,17 @@
             android:backgroundTint="@color/primaryBlue"
             android:textColor="@android:color/white"
             android:textAllCaps="false"
-            android:layout_marginStart="12dp"/>
+            android:layout_marginStart="8dp"/>
+
+        <Button
+            android:id="@+id/btnCalificacionesLista"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Calificaciones"
+            android:backgroundTint="#27AE60"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"
+            android:layout_marginStart="8dp"/>
 
     </LinearLayout>
 
