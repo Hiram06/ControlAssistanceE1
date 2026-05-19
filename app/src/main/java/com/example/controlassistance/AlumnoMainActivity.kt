@@ -140,18 +140,17 @@ class AlumnoMainActivity : AppCompatActivity() {
                                     "Grupo no encontrado", Toast.LENGTH_SHORT).show()
                                 return
                             }
-                            // Verificar si ya está inscrito
                             if (snapshot.child("alumnos").child(uid).exists()) {
                                 Toast.makeText(this@AlumnoMainActivity,
                                     "Ya estás inscrito en este grupo", Toast.LENGTH_SHORT).show()
                                 return
                             }
-                            // Verificar si ya tiene solicitud pendiente
                             db.child("solicitudes").child(grupoId).child(uid)
                                 .addListenerForSingleValueEvent(object : ValueEventListener {
                                     override fun onDataChange(solSnap: DataSnapshot) {
                                         if (solSnap.exists()) {
-                                            val estado = solSnap.child("estado").getValue(String::class.java) ?: ""
+                                            val estado = solSnap.child("estado")
+                                                .getValue(String::class.java) ?: ""
                                             if (estado == "pendiente") {
                                                 Toast.makeText(this@AlumnoMainActivity,
                                                     "Ya tienes una solicitud pendiente en este grupo",
@@ -159,15 +158,14 @@ class AlumnoMainActivity : AppCompatActivity() {
                                                 return
                                             }
                                         }
-                                        // Obtener nombre del alumno
                                         db.child("usuarios").child(uid).child("nombre")
                                             .addListenerForSingleValueEvent(object : ValueEventListener {
                                                 override fun onDataChange(nombreSnap: DataSnapshot) {
                                                     val nombre = nombreSnap.getValue(String::class.java) ?: ""
                                                     val solicitud = mapOf(
-                                                        "alumnoId"  to uid,
-                                                        "nombre"    to nombre,
-                                                        "estado"    to "pendiente"
+                                                        "alumnoId" to uid,
+                                                        "nombre"   to nombre,
+                                                        "estado"   to "pendiente"
                                                     )
                                                     db.child("solicitudes").child(grupoId).child(uid)
                                                         .setValue(solicitud)

@@ -42,6 +42,12 @@ class MaestroMainActivity : AppCompatActivity() {
                 intent.putExtra("grupoId", grupo.id)
                 intent.putExtra("grupoNombre", "${grupo.nombre} — ${grupo.materia}")
                 startActivity(intent)
+            },
+            onInscripcionClick = { grupo ->
+                val intent = Intent(this, InscripcionQRActivity::class.java)
+                intent.putExtra("grupoId", grupo.id)
+                intent.putExtra("grupoNombre", "${grupo.nombre} — ${grupo.materia}")
+                startActivity(intent)
             }
         )
         recyclerView.adapter = adapter
@@ -71,7 +77,8 @@ class MaestroMainActivity : AppCompatActivity() {
                     }
                     adapter.notifyDataSetChanged()
                     val tvVacio = findViewById<TextView>(R.id.tvSinGrupos)
-                    tvVacio.visibility = if (grupos.isEmpty()) android.view.View.VISIBLE else android.view.View.GONE
+                    tvVacio.visibility =
+                        if (grupos.isEmpty()) android.view.View.VISIBLE else android.view.View.GONE
                 }
                 override fun onCancelled(error: DatabaseError) {}
             })

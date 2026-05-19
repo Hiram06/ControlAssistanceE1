@@ -88,6 +88,8 @@
             android:exported="false"/>
 
         <activity android:name=".SolicitudesActivity" android:exported="false"/>
+        <activity android:name=".InscripcionQRActivity" android:exported="false"/>
+        <activity android:name=".AlumnoEscanearInscripcionActivity" android:exported="false"/>
 
     </application>
 

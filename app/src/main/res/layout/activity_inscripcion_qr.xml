@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/backgroundGray">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="@color/primaryBlue"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CONTROL-ASSISTENCE"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnVolverInscripcion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="‹ Volver"
+        android:backgroundTint="@color/primaryBlue"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"
+        android:layout_margin="12dp"/>
+
+    <TextView
+        android:id="@+id/tvTituloInscripcion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:padding="8dp"/>
+
+    <!-- Etiqueta verde para distinguirlo del QR de asistencia -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="QR de INSCRIPCIÓN"
+        android:textSize="13sp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:background="#27AE60"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"/>
+
+    <ImageView
+        android:id="@+id/ivQRInscripcion"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/tvEstadoInscripcion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Esperando que un alumno escanee el código..."
+        android:textSize="14sp"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:padding="16dp"/>
+
+</LinearLayout>

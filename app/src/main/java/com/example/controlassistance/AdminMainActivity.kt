@@ -2,6 +2,7 @@ package com.example.controlassistance
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,7 @@ class AdminMainActivity : AppCompatActivity() {
     private val db     = FirebaseDatabase.getInstance().reference
     private val grupos = mutableListOf<Grupo>()
     private lateinit var adapter: GrupoAdapter
+    private lateinit var btnEliminar: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +25,7 @@ class AdminMainActivity : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerGruposAdmin)
         recyclerView.layoutManager = LinearLayoutManager(this)
+        btnEliminar = findViewById(R.id.btnEliminarGruposAdmin)
 
         adapter = GrupoAdapter(
             grupos,
@@ -39,19 +42,39 @@ class AdminMainActivity : AppCompatActivity() {
                 startActivity(intent)
             },
             modoAdmin = true,
-            onEliminarClick = { grupo ->
-                AlertDialog.Builder(this)
-                    .setTitle("Eliminar grupo")
-                    .setMessage("¿Eliminar el grupo ${grupo.nombre}? Esta acción no se puede deshacer.")
-                    .setPositiveButton("Eliminar") { _, _ ->
-                        db.child("grupos").child(grupo.id).removeValue()
-                        Toast.makeText(this, "Grupo eliminado", Toast.LENGTH_SHORT).show()
-                    }
-                    .setNegativeButton("Cancelar", null)
-                    .show()
+            // Cuando cambia la selección → mostrar/ocultar botón eliminar
+            onSeleccionCambia = { cantidad ->
+                if (cantidad > 0) {
+                    btnEliminar.text = "Eliminar $cantidad grupo(s) seleccionado(s)"
+                    btnEliminar.visibility = View.VISIBLE
+                } else {
+                    btnEliminar.visibility = View.GONE
+                }
             }
         )
         recyclerView.adapter = adapter
+
+        // Botón eliminar con confirmación
+        btnEliminar.setOnClickListener {
+            val seleccionados = adapter.gruposSeleccionados.toSet()
+            if (seleccionados.isEmpty()) return@setOnClickListener
+
+            AlertDialog.Builder(this)
+                .setTitle("Confirmar eliminación")
+                .setMessage("¿Seguro que quieres eliminar ${seleccionados.size} grupo(s)? Esta acción no se puede deshacer.")
+                .setPositiveButton("Eliminar") { _, _ ->
+                    for (grupoId in seleccionados) {
+                        db.child("grupos").child(grupoId).removeValue()
+                    }
+                    adapter.gruposSeleccionados.clear()
+                    btnEliminar.visibility = View.GONE
+                    Toast.makeText(this,
+                        "${seleccionados.size} grupo(s) eliminado(s)",
+                        Toast.LENGTH_SHORT).show()
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
+        }
 
         findViewById<Button>(R.id.btnCrearGrupoAdmin).setOnClickListener {
             startActivity(Intent(this, AdminCrearGrupoActivity::class.java))
@@ -89,7 +112,7 @@ class AdminMainActivity : AppCompatActivity() {
                 }
                 adapter.notifyDataSetChanged()
                 findViewById<TextView>(R.id.tvSinGruposAdmin).visibility =
-                    if (grupos.isEmpty()) android.view.View.VISIBLE else android.view.View.GONE
+                    if (grupos.isEmpty()) View.VISIBLE else View.GONE
             }
             override fun onCancelled(error: DatabaseError) {}
         })

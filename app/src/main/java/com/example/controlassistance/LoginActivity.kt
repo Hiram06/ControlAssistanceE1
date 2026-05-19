@@ -2,6 +2,9 @@ package com.example.controlassistance
 
 import android.content.Intent
 import android.os.Bundle
+import android.graphics.Color
+import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -24,21 +27,40 @@ class LoginActivity : AppCompatActivity() {
         val etPassword  = findViewById<EditText>(R.id.etPassword)
         val btnLogin    = findViewById<Button>(R.id.btnLogin)
 
-        // Quitar el link de registro
         val tvRegister = findViewById<TextView>(R.id.tvRegister)
-        tvRegister.visibility = android.view.View.GONE
+        tvRegister.visibility = View.GONE
 
         val opciones = arrayOf("Alumno", "Maestro", "Admin")
-        val adapter = object : ArrayAdapter<String>(this, R.layout.spinner_item, opciones) {
-            override fun getDropDownView(position: Int, convertView: android.view.View?, parent: android.view.ViewGroup): android.view.View {
-                val view = super.getDropDownView(position, convertView, parent) as TextView
-                view.setTextColor(android.graphics.Color.parseColor("#555555"))
-                view.setBackgroundColor(android.graphics.Color.WHITE)
-                view.textSize = 16f
-                view.setPadding(32, 24, 32, 24)
-                return view
+
+        val adapter = object : ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, opciones) {
+
+            // Vista del item SELECCIONADO (lo que se ve en el recuadro)
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val tv = TextView(context)
+                tv.text = opciones[position]
+                tv.textSize = 16f
+                tv.setTextColor(Color.BLACK)
+                tv.layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                tv.setPadding(16, 16, 16, 16)
+                tv.gravity = android.view.Gravity.CENTER_VERTICAL
+                return tv
+            }
+
+            // Vista del DROPDOWN (lista desplegable)
+            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val tv = TextView(context)
+                tv.text = opciones[position]
+                tv.textSize = 16f
+                tv.setTextColor(Color.parseColor("#333333"))
+                tv.setBackgroundColor(Color.WHITE)
+                tv.setPadding(32, 28, 32, 28)
+                return tv
             }
         }
+
         spinnerTipo.adapter = adapter
         spinnerTipo.setPopupBackgroundResource(android.R.color.white)
 

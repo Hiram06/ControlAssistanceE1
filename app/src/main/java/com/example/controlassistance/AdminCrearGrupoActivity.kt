@@ -22,7 +22,7 @@ class AdminCrearGrupoActivity : AppCompatActivity() {
 
         btnVolver.setOnClickListener { finish() }
 
-        // Cargar maestros
+        // Cargar maestros con layout propio para que el texto salga negro
         db.child("usuarios").orderByChild("tipo").equalTo("Maestro")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -33,8 +33,15 @@ class AdminCrearGrupoActivity : AppCompatActivity() {
                         maestros.add(Pair(uid, nombre))
                     }
                     val nombres = maestros.map { it.second }
-                    spinner.adapter = ArrayAdapter(this@AdminCrearGrupoActivity,
-                        android.R.layout.simple_spinner_dropdown_item, nombres)
+
+                    // Usar layout personalizado con texto negro en lugar del del sistema
+                    val adapter = ArrayAdapter(
+                        this@AdminCrearGrupoActivity,
+                        R.layout.spinner_item,
+                        nombres
+                    )
+                    adapter.setDropDownViewResource(R.layout.spinner_item)
+                    spinner.adapter = adapter
                 }
                 override fun onCancelled(error: DatabaseError) {}
             })
